@@ -9,13 +9,14 @@ int main(int argc, char *argv[])
         printf("wzip: file1 [file2 ...]\n");
         exit(1);
     }
+
+    char c;
+    char cAnterior;
+    char primera = 1;
+    int contador = 1;
+
     for (int i = 1; i < argc; i++)
     {
-
-        char c;
-        char cAnterior;
-        char primera = 1;
-        int contador = 1;
 
         FILE *fp = fopen(argv[i], "r");
         if (fp == NULL)
@@ -36,10 +37,11 @@ int main(int argc, char *argv[])
             }
             else
             {
-                if (primera!=1)
+                if (primera != 1)
                 {
-                    printf("%i %c\n", contador, cAnterior);
-                    
+
+                    fwrite(&contador, 1, sizeof(contador), stdout);
+                    printf("%c", cAnterior);
                 }
 
                 contador = 1;
@@ -47,11 +49,13 @@ int main(int argc, char *argv[])
 
             cAnterior = c;
             c = fgetc(fp);
-            primera=2;
+            primera = 2;
         }
-        printf("%i %c\n", contador, cAnterior);
+
+
         fclose(fp);
     }
-
+    fwrite(&contador, 1, sizeof(contador), stdout);
+    printf("%c", cAnterior);
     return 0;
 }
